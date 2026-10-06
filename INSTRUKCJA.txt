@@ -1,0 +1,54 @@
+﻿MINIATURKI STUDIO — WERSJA 02
+
+URUCHOMIENIE
+Kliknij dwukrotnie start.bat. Wymagany Python 3.11+.
+Pierwszy start instaluje Pillow i rembg, jeśli brakuje tych bibliotek.
+Aplikacja otworzy się pod http://127.0.0.1:8765.
+Pozostaw okno programu otwarte podczas pracy. Zamknij je, aby wyłączyć serwer.
+
+PRACA
+1. Wczytaj własny XML IdoSell (UTF-8, do 40 MB) albo umieść go lokalnie w folderze "input files" i użyj przycisku eksportu.
+2. Kliknij kartę produktu i wybierz dwa zdjęcia: najpierw lewe, potem prawe.
+   Produkt zostanie automatycznie dodany do partii. Checkbox służy do odznaczania.
+3. Podgląd pojawi się automatycznie po wybraniu dwóch zdjęć.
+   Szachownica oznacza przezroczystość. „Zamień ujęcia” zmienia lewe z prawym.
+   „Usuń tło tego produktu” działa osobno dla każdego produktu;
+   wyłącz tę opcję, jeśli znika fragment jasnego obiektu.
+   Po błędzie użyj „Odśwież podgląd”, aby spróbować ponownie.
+4. Uzupełnij zdjęcia wszystkich zaznaczonych produktów i wygeneruj partię.
+5. Pobierz ZIP. Te same pliki znajdziesz w output/IDENTYFIKATOR_PARTII/.
+
+WYNIKI
+Każdy produkt: ID.webp, 2560 × 2560 px, przezroczyste płótno.
+Dwa zdjęcia obok siebie, bez deformowania proporcji.
+Podgląd ma 768 × 768 px: jest pomniejszeniem docelowego pliku WebP.
+Zmiany zdjęć, kolejności i tła automatycznie odświeżają podgląd.
+W jednej partii można łączyć produkty z usuwaniem tła i bez niego.
+Każda partia ma osobny folder, więc poprzednie wyniki pozostają zachowane.
+Błąd jednego produktu nie zatrzymuje kolejnych. Kliknij kartę z błędem,
+aby zobaczyć przyczynę; filtr Błędy pomaga przygotować ponowną próbę.
+
+OGRANICZENIA
+Usuwanie tła działa lokalnie przez model U2Net. Model może pomylić fragmenty obiektu
+z tłem lub zostawić obwódkę; sprawdź podgląd i w razie potrzeby wyłącz opcję.
+Produkty z mniej niż dwoma zdjęciami wymagają uzupełnienia źródłowego XML.
+Wybory, ustawienia tła i statusy są przechowywane w bieżącej karcie przeglądarki;
+odświeżenie strony je resetuje. Gotowe pliki pozostają na dysku.
+Internet jest wymagany do pierwszego pobrania zdjęć oraz modelu U2Net (około 176 MB).
+Zdjęcia są buforowane w .cache/, model w katalogu użytkownika .u2net/.
+Aplikacja działa lokalnie, bez wysyłania XML do zewnętrznego serwisu.
+
+TESTY
+python -m unittest discover -s tests -v
+
+Test interfejsu w Chrome, bez internetu i pobierania zdjęć produktów:
+node tests/browser-v02.cjs
+Wymaga Playwright: npm install --prefix .cache/browser playwright
+Domyślnie korzysta z Chrome w C:/Program Files/Google/Chrome/Application/.
+Inną ścieżkę do pliku chrome.exe można podać zmienną CHROME_PATH.
+Test sam uruchamia lokalny serwer na wolnym porcie i zamyka go po zakończeniu.
+
+WERSJE
+stable/mvp-01-snapshot — zachowany stan aplikacji przed zmianami.
+feature/v02-product-preview — wersja 02 z automatycznym podglądem.
+Gałąź main pozostaje bez zmian. Wersja 02 nie została wdrożona.
